@@ -10,9 +10,6 @@ import java.util.*;
 import java.util.Date;
 
 public class Menu {
-    private String login;
-    private String password;
-    private int id;
 
 
     Scanner userInput = new Scanner(System.in);
@@ -29,9 +26,9 @@ public class Menu {
         while(!end) {
             try {
                 System.out.println("Enter your login: ");
-                login = userInput.next();
+                String login = userInput.next();
                 System.out.println("Enter your password: ");
-                password = userInput.next();
+                String password = userInput.next();
                 Iterator it = users.entrySet().iterator();
 
                 while (it.hasNext()) {
@@ -89,7 +86,6 @@ public class Menu {
                         System.out.println("Wrong choose");
                 }
             } catch (InputMismatchException | IOException e) {
-                e.printStackTrace();
                 System.out.println("\nInvalid action");
                 userInput.next();
             }
@@ -127,7 +123,6 @@ public class Menu {
                 addItemMultipleChoose(listToAdd);
 
             } catch (InputMismatchException e) {
-                e.printStackTrace();
                 System.out.println("Wrong input");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -152,7 +147,7 @@ public class Menu {
                         menuSelection = integer;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Error! Invalid integer. Try again.");
+                    System.out.println("Error! Enter integer:");
                 }
             }
 
@@ -179,17 +174,24 @@ public class Menu {
 
     public void removeItem() throws SQLException {
         boolean end = false;
+        int id;
         while (!end) {
             try {
-                    System.out.println("\nEnter item id");
-                    id = userInput.nextInt();
-                    listToDelete.add(id);
-                    removeItemMultipleChoose(listToDelete);
 
-//                    System.out.println("Continue adding?: ");
-//                    System.out.println("1. Yes");
-//                    System.out.println("2. Exit");
-//                    menuSelection = userInput.nextInt();
+                System.out.println("\nEnter item id");
+                int integer = Integer.MAX_VALUE;
+                while (integer == Integer.MAX_VALUE) {
+                    String input = userInput.next();
+                    try {
+                        integer = Integer.parseInt(input);
+                        id = integer;
+                        listToDelete.add(id);
+                        removeItemMultipleChoose(listToDelete);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error! Enter integer:");
+                    }
+                }
+
             } catch (InputMismatchException e) {
                 System.out.println("Wrong input");
                 userInput.nextInt();
@@ -216,7 +218,7 @@ public class Menu {
                         menuSelection = integer;
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Error! Invalid integer. Try again.");
+                    System.out.println("Error! Enter integer:");
                 }
             }
 
@@ -243,17 +245,24 @@ public class Menu {
 
     public void editItem() {
         boolean end = false;
-
+        int id = 0;
         while (!end) {
             try {
                 System.out.println("Enter item id");
 
-                int id = userInput.nextInt();
-
-                String query = String.format("SELECT * FROM stock WHERE id=%d", id);
-                System.out.println("Selected item: ");
-                viewStock(query);
-
+                int integer = Integer.MAX_VALUE;
+                while (integer == Integer.MAX_VALUE) {
+                    String input = userInput.next();
+                    try {
+                        integer = Integer.parseInt(input);
+                        id = integer;
+                        String query = String.format("SELECT * FROM stock WHERE id=%d", id);
+                        System.out.println("Selected item: ");
+                        viewStock(query);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error! Enter integer:");
+                    }
+                }
                 System.out.println("Enter new name: ");
                 String name = userInput.next();
                 System.out.println("Enter new price: ");
